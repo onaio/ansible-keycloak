@@ -103,7 +103,7 @@
     service_list:
       - name: keycloak
         description: Keycloak service
-        start_command: "{{ keycloak_home }}/bin/standalone.sh"
+        start_command: "{{ keycloak_clustered_start_command if keycloak_clustered_mode else keycloak_start_command }}"
         user_name: keycloak
         group_name: keycloak
 
