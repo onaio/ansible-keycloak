@@ -15,6 +15,13 @@ postgresql_driver_jar_mirror: https://jdbc.postgresql.org/download/
 postgresql_driver_jar_name: postgresql-42.2.12.jre6
 keycloak_postgresql_user: "keycloak"
 
+keycloak_clustered_mode: false
+
+keycloak_start_command: "{{ keycloak_home }}/bin/standalone.sh"
+keycloak_clustered_start_command: "{{ keycloak_home }}/bin/standalone.sh -c standalone-ha.xml -Djboss.node.name=node1 -b {{ ansible_default_ipv4.address }}"
+
+keycloak_config_file: "{{ 'standalone-ha.xml' if keycloak_clustered_mode else 'standalone.xml' }}"
+
 # Certbot
 keycloak_certbot_site_names: ["{{ keycloak_site_name }}"]
 keycloak_certbot_mail_address: ""
@@ -23,7 +30,6 @@ keycloak_certbot_mail_address: ""
 keycloak_nginx_ssl_src_dir: "/etc/letsencrypt/live/{{ keycloak_site_name }}"
 keycloak_nginx_ssl_cert_file: "fullchain.pem"
 keycloak_nginx_ssl_key_file: "privkey.pem"
-keycloak_nginx_certs_from_letsencrypt: true
 
 keycloak_nginx_http_site: "{{ keycloak_site_name }}-http"
 keycloak_nginx_https_site: "{{ keycloak_site_name }}-https"
@@ -46,12 +52,12 @@ keycloak_nginx_sites:
       large_client_header_buffers: "8 64k"
       ssl:
         enabled: true
-        cert: "{{ keycloak_nginx_sl_cert_file }}"
+        cert: "{{ keycloak_nginx_ssl_cert_file }}"
         key:  "{{ keycloak_nginx_ssl_key_file }}"
         src_dir: "{{ keycloak_nginx_ssl_src_dir }}"
         conf: "{{ keycloak_site_name }}-ssl.conf"
-        remote_src: "{{ keycloak_nginx_certs_from_letsencrypt }}"
-        create_symlink: "{{ keycloak_nginx_certs_from_letsencrypt }}"
+        remote_src: "{{ not keycloak_clustered_mode }}"
+        create_symlink: "{{ not keycloak_clustered_mode }}"
         access_log_format: "timed_combined"
 
       location1:
