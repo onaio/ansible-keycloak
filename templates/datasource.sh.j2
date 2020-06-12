@@ -21,13 +21,11 @@ read -d '' template << EOF
 		</datasources>
 EOF
 
-awk -v template="$template" 'BEGIN {A = 1};/<datasources>/{A=0; print template };/.*/ { if ( A == 1) print $0};/<\/datasources>/{A=1}; ' {{ keycloak_home }}/standalone/configuration/standalone.xml > {{ keycloak_home }}/standalone/configuration/standalone1.xml
+awk -v template="$template" 'BEGIN {A = 1};/<datasources>/{A=0; print template };/.*/ { if ( A == 1) print $0};/<\/datasources>/{A=1}; ' {{ keycloak_home }}/standalone/configuration/{{ keycloak_config_file }} > {{ keycloak_home }}/standalone/configuration/standalone1.xml
 
 sed -i 's/ExampleDS/KeycloakDS/g' {{ keycloak_home }}/standalone/configuration/standalone1.xml
 sed -i "s/$(echo -ne '\u200b')//g" {{ keycloak_home }}/standalone/configuration/standalone1.xml
 
-mv {{ keycloak_home }}/standalone/configuration/standalone1.xml {{ keycloak_home }}/standalone/configuration/standalone.xml
-chmod 755 {{ keycloak_home }}/standalone/configuration/standalone.xml
+mv {{ keycloak_home }}/standalone/configuration/standalone1.xml {{ keycloak_home }}/standalone/configuration/{{ keycloak_config_file }}
 
 echo "feature.account_api=enabled" >> {{ keycloak_home }}/standalone/configuration/profile.properties
-chmod 755 {{ keycloak_home }}/standalone/configuration/profile.properties
