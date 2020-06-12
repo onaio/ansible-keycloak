@@ -1,3 +1,4 @@
+---
 dependencies:
 - role: openjdk
   java_packages: "{{ keycloak_java_packages }}"
@@ -12,7 +13,7 @@ dependencies:
   certbot_create_certs: true
   certbot_site_names: "{{ keycloak_certbot_site_names }}"
   certbot_mail_address: "{{ keycloak_certbot_mail_address }}"
-  when: keycloak_nginx_certs_from_letsencrypt
+  when: not keycloak_clustered_mode
   tags:
     - certbot
 
