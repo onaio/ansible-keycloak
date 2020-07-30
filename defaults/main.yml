@@ -86,31 +86,8 @@ keycloak_nginx_access_logs:
 
 # Cheksums
 keycloak_checksums:
-  # https://downloads.jboss.org/keycloak/3.2.1.Final/keycloak-3.2.1.Final.tar.gz.sha1
-  '3.2.1.Final': sha1:de6d7ac62e2a82c7ecdfcf04c9970163415d9b75
-  # https://downloads.jboss.org/keycloak/3.4.3.Final/keycloak-3.4.3.Final.tar.gz.sha1
-  '3.4.3.Final': sha1:f2b1272ab8d4413f408b444bc2108740845bc976
-  # https://downloads.jboss.org/keycloak/4.4.0.Final/keycloak-4.4.0.Final.tar.gz.sha1
-  '4.4.0.Final': sha1:5a1cf11f69862ff6944267a4e5509e9afaedddcb
-  # https://downloads.jboss.org/keycloak/4.6.0.Final/keycloak-4.6.0.Final.tar.gz.sha1
-  '4.6.0.Final': sha1:1dadc90860ec429a35e6e50b5ac4f4b6a7511dcc
-  # https://downloads.jboss.org/keycloak/4.7.0.Final/keycloak-4.7.0.Final.tar.gz.sha1
-  '4.7.0.Final': sha1:abb81b88ab762d58cb9d9c20948649265acfc356
-  # https://downloads.jboss.org/keycloak/4.8.3.Final/keycloak-4.8.3.Final.tar.gz.sha1
-  '4.8.3.Final': sha1:16abcbeb6a76f46a985eff66d69a326ca9a64a54
-  # https://downloads.jboss.org/keycloak/5.0.0/keycloak-5.0.0.tar.gz.sha1
-  '5.0.0': sha1:45848b55c36c8df3cbfeb156c7e4a71b61c4674a
-  # https://downloads.jboss.org/keycloak/6.0.1/keycloak-6.0.1.tar.gz.sha1
-  '6.0.1': sha1:472b37ccc9b5bb3119295c2880db49aada2fe9ed
-  # https://downloads.jboss.org/keycloak/7.0.0/keycloak-7.0.0.tar.gz.sha1
-  '7.0.0': sha1:0b55ca857682928968efaf64b75dbe0c16b7644c
-  # https://downloads.jboss.org/keycloak/7.0.1/keycloak-7.0.1.tar.gz.sha1
-  '7.0.1': sha1:eb2213cf652c08a61a756e32343a138e13a31c95
-  # https://downloads.jboss.org/keycloak/8.0.0/keycloak-8.0.0.tar.gz.sha1
-  '8.0.0': sha1:c08d2fffa5a054eb47d1833aadf95a1d3e09df9f
-  # https://downloads.jboss.org/keycloak/8.0.1/keycloak-8.0.1.tar.gz.sha1
-  '8.0.1': sha1:ca4d73cdba3b8ccea6777b0edbbe6bfafcc29a00
   # https://downloads.jboss.org/keycloak/9.0.0/keycloak-9.0.0.tar.gz.sha1
   '9.0.0': sha1:a667600d9e849a13e14e1bcb3b9821e28ce4ae9c
   # https://downloads.jboss.org/keycloak/11.0.0/keycloak-11.0.0.tar.gz.sha1
   '11.0.0': sha1:398a328a180682ee58b06df148938f5de710f89f
+  
