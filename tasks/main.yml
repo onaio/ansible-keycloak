@@ -73,6 +73,9 @@
         group=keycloak
         state=directory
 
+- include_tasks: ha.yml
+  when: keycloak_clustered_mode
+
 - include_tasks: postgresql.yml
 
 - name: Check if admin is already created
@@ -107,7 +110,7 @@
         user_name: keycloak
         group_name: keycloak
 
-- name: start and enable tomcat instance
+- name: start and enable keycloak service
   become: yes
   become_user: root
   service:
