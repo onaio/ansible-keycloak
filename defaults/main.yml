@@ -18,7 +18,7 @@ keycloak_postgresql_user: "keycloak"
 keycloak_clustered_mode: false
 
 keycloak_start_command: "{{ keycloak_home }}/bin/standalone.sh"
-keycloak_clustered_start_command: "{{ keycloak_home }}/bin/standalone.sh -c standalone-ha.xml -Djboss.bind.address.private={{ ansible_default_ipv4.address }}"
+keycloak_clustered_start_command: "{{ keycloak_home }}/bin/standalone.sh -c standalone-ha.xml -b={{ ansible_default_ipv4.address }} -Djboss.bind.address.private={{ ansible_default_ipv4.address }}"
 
 keycloak_config_file: "{{ 'standalone-ha.xml' if keycloak_clustered_mode else 'standalone.xml' }}"
 
