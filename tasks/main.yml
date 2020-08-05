@@ -51,6 +51,9 @@
   - keyclock
   user: name=keycloak
 
+- include_tasks: ha.yml
+  when: keycloak_clustered_mode
+
 - name: Keycloak target directory
   become: yes
   become_user: root
@@ -72,9 +75,6 @@
         owner=keycloak
         group=keycloak
         state=directory
-
-- include_tasks: ha.yml
-  when: keycloak_clustered_mode
 
 - include_tasks: postgresql.yml
 
