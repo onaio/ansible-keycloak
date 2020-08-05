@@ -52,7 +52,7 @@
   user: name=keycloak
 
 - include_tasks: ha.yml
-  when: keycloak_clustered_mode
+  when: keycloak_clustered_mode|bool
 
 - name: Keycloak target directory
   become: yes
