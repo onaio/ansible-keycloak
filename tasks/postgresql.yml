@@ -21,6 +21,31 @@
   retries: 3
   delay: 10
 
+- name: Make sure the keycloak postgresql database exists
+  postgresql_db:
+    name: "{{ keycloak_postgresql_database }}"
+    login_host: "{{ keycloak_postgresql_host }}"
+    port: "{{ keycloak_postgresql_port }}"
+    login_user: "{{ keycloak_postgres_superuser }}"
+    login_password: "{{ keycloak_postgres_superuser_password }}"
+  tags:
+    - postgresql
+
+- name: Ensure keycloak postgresql user has the right access level
+  postgresql_user:
+    db: "{{ keycloak_postgresql_database }}"
+    login_host: "{{ keycloak_postgresql_host }}"
+    port: "{{ keycloak_postgresql_port }}"
+    login_user: "{{ keycloak_postgres_superuser }}"
+    login_password: "{{ keycloak_postgres_superuser_password }}"
+    name: "{{ keycloak_postgresql_user }}"
+    password: "{{ keycloak_postgresql_password }}"
+    encrypted: yes
+    priv: ALL
+    role_attr_flags: "{{ keycloak_postgresql_user_role_attr_flags }}"
+  tags:
+    - postgresql
+
 - name: Copy module.xml config
   become: yes
   become_user: root

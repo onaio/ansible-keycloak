@@ -14,6 +14,7 @@ keycloak_log_dir: "/var/log/keycloak"
 postgresql_driver_jar_mirror: https://jdbc.postgresql.org/download/
 postgresql_driver_jar_name: postgresql-42.2.12.jre6
 keycloak_postgresql_user: "keycloak"
+keycloak_postgresql_user_role_attr_flags: "LOGIN"
 
 keycloak_clustered_mode: false
 
