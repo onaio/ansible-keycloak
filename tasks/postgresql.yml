@@ -1,3 +1,12 @@
+- name: install postgres prerequisites
+  sudo: true
+  apt: name={{ item }} state=latest
+  with_items:
+    - libpq-dev
+    - python-psycopg2
+  tags:
+    - packages
+
 - name: Ensure postgresql module dir exists
   become: yes
   become_user: "root"
