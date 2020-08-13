@@ -37,6 +37,10 @@
     port: "{{ keycloak_postgresql_port }}"
     login_user: "{{ keycloak_postgres_superuser }}"
     login_password: "{{ keycloak_postgres_superuser_password }}"
+  register: result
+  retries: 1 #fix postgres db creation race condition. https://www.postgresql.org/message-id/4B994FC0.1030801@grammatech.com
+  delay: 10
+  until: result is succeeded
   tags:
     - postgresql
 
