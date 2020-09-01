@@ -1,3 +1,12 @@
+- name: install postgres prerequisites
+  sudo: true
+  apt:
+    pkg:
+      - libpq-dev
+      - python-psycopg2
+  tags:
+    - packages
+
 - name: Ensure postgresql module dir exists
   become: yes
   become_user: "root"
@@ -20,6 +29,35 @@
     timeout: 60
   retries: 3
   delay: 10
+
+- name: Make sure the keycloak postgresql database exists
+  postgresql_db:
+    name: "{{ keycloak_postgresql_database }}"
+    login_host: "{{ keycloak_postgresql_host }}"
+    port: "{{ keycloak_postgresql_port }}"
+    login_user: "{{ keycloak_postgres_superuser }}"
+    login_password: "{{ keycloak_postgres_superuser_password }}"
+  register: result
+  retries: 1 #fix postgres db creation race condition. https://www.postgresql.org/message-id/4B994FC0.1030801@grammatech.com
+  delay: 10
+  until: result is succeeded
+  tags:
+    - postgresql
+
+- name: Ensure keycloak postgresql user has the right access level
+  postgresql_user:
+    db: "{{ keycloak_postgresql_database }}"
+    login_host: "{{ keycloak_postgresql_host }}"
+    port: "{{ keycloak_postgresql_port }}"
+    login_user: "{{ keycloak_postgres_superuser }}"
+    login_password: "{{ keycloak_postgres_superuser_password }}"
+    name: "{{ keycloak_postgresql_user }}"
+    password: "{{ keycloak_postgresql_password }}"
+    encrypted: yes
+    priv: ALL
+    role_attr_flags: "{{ keycloak_postgresql_user_role_attr_flags }}"
+  tags:
+    - postgresql
 
 - name: Copy module.xml config
   become: yes
