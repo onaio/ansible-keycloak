@@ -17,6 +17,7 @@ keycloak_postgresql_user: "keycloak"
 keycloak_postgresql_user_role_attr_flags: "LOGIN"
 
 keycloak_clustered_mode: false
+keycloak_postgresql_port: 5432
 
 keycloak_start_command: "{{ keycloak_home }}/bin/standalone.sh -b={{ ansible_default_ipv4.address }}"
 keycloak_clustered_start_command: "{{ keycloak_home }}/bin/standalone.sh -c standalone-ha.xml -b={{ ansible_default_ipv4.address }} -Djboss.bind.address.private={{ ansible_default_ipv4.address }}"
