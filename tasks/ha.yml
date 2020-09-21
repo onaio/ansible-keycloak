@@ -1,5 +1,5 @@
 - name: Copy jgroups-jdbc-ping.cli file
-  become: yes
+  become: true
   become_user: root
   tags:
     - keycloak
@@ -9,7 +9,7 @@
       dest={{ keycloak_home }}/jgroups-jdbc-ping.cli
 
 - name: Copy standalone-ha-configuration.cli file
-  become: yes
+  become: true
   become_user: root
   tags:
     - keycloak
@@ -19,7 +19,7 @@
       dest={{ keycloak_home }}/standalone-ha-configuration.cli
 
 - name: Check if JDBC_PING is already configured
-  become: yes
+  become: true
   become_user: root
   stat:
     path: '{{ keycloak_home }}/.jdbc_ping'
@@ -28,11 +28,13 @@
 - when: not result.stat.exists
   block:
     - name: Configure JDBC_PING
-      shell: "{{ keycloak_home }}/bin/jboss-cli.sh --file={{ keycloak_home }}/standalone-ha-configuration.cli"
-      become: yes
+      command: "{{ keycloak_home }}/bin/jboss-cli.sh --file={{ keycloak_home }}/standalone-ha-configuration.cli"
+      become: true
       become_user: root
+
     - name: mark that JDBC_PING is configured
-      become: yes
+      become: true
       become_user: root
-      file: dest="{{ keycloak_home }}/.jdbc_ping"
-        state=touch
+      file:
+        dest: "{{ keycloak_home }}/.jdbc_ping"
+        state: touch

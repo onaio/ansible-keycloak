@@ -13,7 +13,7 @@ dependencies:
   certbot_create_certs: true
   certbot_site_names: "{{ keycloak_certbot_site_names }}"
   certbot_mail_address: "{{ keycloak_certbot_mail_address }}"
-  when: not keycloak_clustered_mode
+  when: keycloak_certs_from_letsencrypt
   tags:
     - certbot
 
@@ -23,7 +23,7 @@ dependencies:
   nginx_sites: "{{ keycloak_nginx_sites }}"
   nginx_enabled_sites: "{{ keycloak_nginx_enabled_sites }}"
   nginx_disabled_sites: "{{ keycloak_nginx_disabled_sites }}"
-  nginx_ssl_dir: "{{ nginx_dir }}/ssl/{{ site.server.server_name }}"
+  nginx_ssl_dir: "{{ keycloak_nginx_ssl_dir }}"
   nginx_server_names_hash_bucket_size: "{{ keycloak_nginx_server_names_hash_bucket_size }}"
   nginx_log_dir: "{{ keycloak_nginx_log_dir }}"
   nginx_access_logs: "{{ keycloak_nginx_access_logs }}"

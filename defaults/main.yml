@@ -27,6 +27,7 @@ keycloak_config_file: "{{ 'standalone-ha.xml' if keycloak_clustered_mode else 's
 # Certbot
 keycloak_certbot_site_names: ["{{ keycloak_site_name }}"]
 keycloak_certbot_mail_address: ""
+keycloak_certs_from_letsencrypt: "{{ not keycloak_clustered_mode }}"
 
 # NGINX
 keycloak_nginx_ssl_src_dir: "/etc/letsencrypt/live/{{ keycloak_site_name }}"
@@ -40,7 +41,10 @@ keycloak_nginx_https_site: "{{ keycloak_site_name }}-https"
 keycloak_nginx_proxy_buffer_size: "128k"
 keycloak_nginx_proxy_buffers: "4 256k"
 keycloak_nginx_proxy_busy_buffers_size: "256k"
-
+keycloak_nginx_ssl_remote_src: "{{ not keycloak_clustered_mode }}"
+keycloak_nginx_ssl_create_symlink: "{{ not keycloak_clustered_mode }}"
+keycloak_nginx_ssl_dir: "{{ nginx_dir }}/ssl/{{ site.server.server_name }}"
+keycloak_nginx_upstream_url: "https://localhost:{{ keycloak_https_port }}"
 keycloak_nginx_server_names_hash_bucket_size: 64
 keycloak_nginx_sites:
   - server:
@@ -63,13 +67,13 @@ keycloak_nginx_sites:
         key:  "{{ keycloak_nginx_ssl_key_file }}"
         src_dir: "{{ keycloak_nginx_ssl_src_dir }}"
         conf: "{{ keycloak_site_name }}-ssl.conf"
-        remote_src: "{{ not keycloak_clustered_mode }}"
-        create_symlink: "{{ not keycloak_clustered_mode }}"
+        remote_src: "{{ keycloak_nginx_ssl_remote_src }}"
+        create_symlink: "{{ keycloak_nginx_ssl_create_symlink }}"
         access_log_format: "timed_combined"
 
       location1:
         name: "/"
-        proxy_pass: "https://localhost:{{ keycloak_https_port }}"
+        proxy_pass: "{{ keycloak_nginx_upstream_url }}"
         proxy_read_timeout: "86400s"
         proxy_next_upstream: "error timeout invalid_header http_502 http_503 http_504"
         proxy_set_header:

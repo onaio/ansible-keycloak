@@ -1,6 +1,6 @@
 ---
 - name: Check for existing install
-  become: yes
+  become: true
   become_user: root
   stat:
     path: '{{ keycloak_install_dir }}'
@@ -10,7 +10,7 @@
 - when: not keycloak_binary.stat.exists
   block:
     - name: Download keycloak tgz
-      become: yes
+      become: true
       become_user: root
       get_url:
         url: '{{ keycloak_tgz_url }}'
@@ -21,23 +21,23 @@
       retries: 3
       delay: 10
     - name: Unarchive keycloak tgz
-      become: yes
+      become: true
       become_user: root
       unarchive:
-        remote_src: yes
+        remote_src: true
         src: /tmp/{{ keycloak_tgz }}
         dest: '{{ keycloak_parent_install_dir }}'
         creates: '{{ keycloak_install_dir }}'
   always:
     - name: Cleanup...
-      become: yes
+      become: true
       become_user: root
       file:
         path: /tmp/{{ keycloak_tgz }}
         state: absent
 
 - name: Create link
-  become: yes
+  become: true
   become_user: root
   file:
     src: '{{ keycloak_install_dir }}'
@@ -45,7 +45,7 @@
     state: link
 
 - name: Create keycloak user
-  become: yes
+  become: true
   become_user: root
   tags:
   - keycloak
@@ -55,7 +55,7 @@
   when: keycloak_clustered_mode|bool
 
 - name: Keycloak target directory
-  become: yes
+  become: true
   become_user: root
   tags:
   - keycloak
@@ -66,7 +66,7 @@
         recurse=true
 
 - name: Keycloak log directory
-  become: yes
+  become: true
   become_user: root
   tags:
   - keycloak
@@ -79,7 +79,7 @@
 - include_tasks: postgresql.yml
 
 - name: Check if admin is already created
-  become: yes
+  become: true
   become_user: root
   stat:
     path: '{{ keycloak_home }}/.admin'
@@ -88,17 +88,19 @@
 - when: not result.stat.exists
   block:
     - name: Add admin user
-      shell: "{{ keycloak_home }}/bin/add-user-keycloak.sh -r master -u {{ keycloak_admin_username }} -p {{ keycloak_admin_password }}"
-      become: yes
+      command: "{{ keycloak_home }}/bin/add-user-keycloak.sh -r master -u {{ keycloak_admin_username }} -p {{ keycloak_admin_password }}"
+      become: true
       become_user: root
+
     - name: mark that admin is created
-      become: yes
+      become: true
       become_user: root
-      file: dest="{{ keycloak_home }}/.admin"
-        state=touch
+      file:
+        dest: "{{ keycloak_home }}/.admin"
+        state: touch
 
 - name: Create keycloak service
-  become: yes
+  become: true
   become_user: root
   import_role:
     name: robertdebock.service
@@ -111,9 +113,9 @@
         group_name: keycloak
 
 - name: start and enable keycloak service
-  become: yes
+  become: true
   become_user: root
   service:
     name: keycloak
     state: started
-    enabled: yes
+    enabled: true
