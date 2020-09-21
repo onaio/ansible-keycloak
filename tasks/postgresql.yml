@@ -1,5 +1,5 @@
 - name: install postgres prerequisites
-  sudo: true
+  become: true
   apt:
     pkg:
       - libpq-dev
@@ -8,7 +8,7 @@
     - packages
 
 - name: Ensure postgresql module dir exists
-  become: yes
+  become: true
   become_user: "root"
   file:
     path: "{{ postgresql_module_home }}"
@@ -19,7 +19,7 @@
     - keycloak
 
 - name: Download postgresql driver JAR
-  become: yes
+  become: true
   become_user: "root"
   get_url:
     url: "{{ postgresql_driver_jar_download_url }}"
@@ -53,14 +53,14 @@
     login_password: "{{ keycloak_postgres_superuser_password }}"
     name: "{{ keycloak_postgresql_user }}"
     password: "{{ keycloak_postgresql_password }}"
-    encrypted: yes
+    encrypted: true
     priv: ALL
     role_attr_flags: "{{ keycloak_postgresql_user_role_attr_flags }}"
   tags:
     - postgresql
 
 - name: Copy module.xml config
-  become: yes
+  become: true
   become_user: root
   tags:
     - keycloak
@@ -70,7 +70,7 @@
       dest={{ postgresql_module_home }}/module.xml
 
 - name: Copy datasource script
-  become: yes
+  become: true
   become_user: keycloak
   tags:
     - keycloak
@@ -79,15 +79,15 @@
       src=datasource.sh.j2
       dest={{ keycloak_home }}/standalone/datasource.sh
 
-- name: Update standalone.xml config
+- name: Update standalone.xml config # noqa 301
   tags:
     - keycloak
-  become: yes
+  become: true
   become_user: keycloak
   command: "{{ keycloak_home }}/standalone/datasource.sh"
 
 - name: Cleanup...
-  become: yes
+  become: true
   become_user: keycloak
   file:
     path: "{{ keycloak_home }}/standalone/datasource.sh"
