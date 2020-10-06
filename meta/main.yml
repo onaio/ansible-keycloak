@@ -39,6 +39,21 @@ dependencies:
   tags:
     - collectd
 
+- role: onaio.logstash
+  become: true
+  become_user: "root"
+  logstash_plugins: "{{ keycloak_logstash_plugins }}"
+  logstash_custom_outputs: "{{ keycloak_logstash_custom_outputs }}"
+  logstash_custom_inputs: "{{ keycloak_logstash_custom_inputs }}"
+  logstash_system_groups: ["adm"]
+  config_logstash: true
+  logstash_install_java: false
+  logstash_input_config_suffix: "{{ keycloak_logstash_input_config_suffix }}"
+  clear_logstash_config: "{{ keycloak_clear_logstash_config }}"
+  when: keycloak_install_logstash
+  tags:
+   - logstash
+
 galaxy_info:
   author: Andrew Rothstein
   company: BlackRock
