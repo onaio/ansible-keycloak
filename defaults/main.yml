@@ -1,5 +1,6 @@
 ---
 keycloak_ver: '11.0.0'
+keycloak_environment: "production"
 keycloak_mirror: https://downloads.jboss.org/keycloak
 
 keycloak_parent_install_dir: /opt
@@ -127,6 +128,7 @@ keycloak_logstash_custom_inputs:
       - '  from_domain => "{{ keycloak_site_name }}"'
       - '  from_keycloak => true'
       - '  git_version => "{{ keycloak_ver }}"'
+      - '  environment => "{{ keycloak_environment }}"'
       - '}'
 
 # Cheksums
