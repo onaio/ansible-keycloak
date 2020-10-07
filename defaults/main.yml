@@ -98,6 +98,37 @@ keycloak_nginx_access_logs:
     options: null
     filename: "access.log"
 
+# Logstash
+keycloak_install_logstash: true
+keycloak_logstash_gelf_server: 127.0.0.1
+keycloak_logstash_gelf_port: "12204"
+keycloak_logstash_input_config_suffix: "{{ keycloak_site_name }}"
+keycloak_clear_logstash_config: false
+keycloak_logstash_plugins:
+  - name: logstash-output-gelf
+    state: present
+keycloak_logstash_custom_outputs:
+  - output: 'gelf'
+    lines:
+      - 'host => "{{ keycloak_logstash_gelf_server }}"'
+      - 'port => "{{ keycloak_logstash_gelf_port }}"'
+      - 'sender => "%{host}"'
+keycloak_nginx_logstash_log: "{{ keycloak_nginx_log_dir }}/{{ keycloak_nginx_https_site }}-ssl-access.log"
+keycloak_logstash_custom_inputs:
+  - input: 'file'
+    lines:
+      - 'path => ["{{ keycloak_nginx_logstash_log }}"]'
+      - 'start_position => "end"'
+      - 'add_field => {'
+      - '  ssl => true'
+      - '  nginx_access => true'
+      - '  from_nginx => true'
+      - '  from_host => "%{host}"'
+      - '  from_domain => "{{ keycloak_site_name }}"'
+      - '  from_keycloak => true'
+      - '  git_version => "{{ keycloak_ver }}"'
+      - '}'
+
 # Cheksums
 keycloak_checksums:
   # https://downloads.jboss.org/keycloak/9.0.0/keycloak-9.0.0.tar.gz.sha1
