@@ -20,8 +20,9 @@ keycloak_postgresql_user_role_attr_flags: "LOGIN"
 keycloak_clustered_mode: false
 keycloak_postgresql_port: 5432
 
-keycloak_start_command: "{{ keycloak_home }}/bin/standalone.sh -b={{ ansible_default_ipv4.address }}"
-keycloak_clustered_start_command: "{{ keycloak_home }}/bin/standalone.sh -c standalone-ha.xml -b={{ ansible_default_ipv4.address }} -Djboss.bind.address.private={{ ansible_default_ipv4.address }}"
+keycloak_bind_address: "localhost"
+keycloak_start_command: "{{ keycloak_home }}/bin/standalone.sh -b={{ keycloak_bind_address }}"
+keycloak_clustered_start_command: "{{ keycloak_home }}/bin/standalone.sh -c standalone-ha.xml -b={{ keycloak_bind_address }} -Djboss.bind.address.private={{ keycloak_bind_address }}"
 
 keycloak_config_file: "{{ 'standalone-ha.xml' if keycloak_clustered_mode else 'standalone.xml' }}"
 
@@ -45,7 +46,7 @@ keycloak_nginx_proxy_busy_buffers_size: "256k"
 keycloak_nginx_ssl_remote_src: "{{ not keycloak_clustered_mode }}"
 keycloak_nginx_ssl_create_symlink: "{{ not keycloak_clustered_mode }}"
 keycloak_nginx_ssl_dir: "{{ nginx_dir }}/ssl/{{ site.server.server_name }}"
-keycloak_nginx_upstream_url: "https://localhost:{{ keycloak_https_port }}"
+keycloak_nginx_upstream_url: "https://{{ keycloak_bind_address }}:{{ keycloak_https_port }}"
 keycloak_nginx_server_names_hash_bucket_size: 64
 keycloak_nginx_sites:
   - server:
